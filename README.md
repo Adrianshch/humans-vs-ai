@@ -82,6 +82,23 @@ In-app (🌱 button) transparency panel: live count of AI generations, tokens, a
 | `OLLAMA_MODEL` | `llama3.2:1b` | Model the bots use |
 | `OLLAMA_TIMEOUT_MS` | `20000` | Per-generation timeout before fallback |
 
+## Deploy so friends can play (Render)
+
+This game needs a persistent WebSocket server, so it runs on a real Node host — **not** Vercel/Netlify (serverless can't hold WebSocket connections or in-memory game state). Render's free tier works and is already configured via `render.yaml`.
+
+> On a host there's no Ollama, so the bots use the built-in offline answer bank. The game plays fine; you just don't get the local-LLM AI (see the local instructions above for that).
+
+1. **Put the code on GitHub** (from this folder):
+   ```bash
+   git remote add origin https://github.com/<you>/hidden-role-game.git
+   git push -u origin main
+   ```
+   (Create the empty repo on github.com first.)
+2. **Deploy on Render:** go to [dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint** → connect your GitHub repo. Render reads `render.yaml` and deploys automatically.
+3. Share the resulting `https://your-app.onrender.com` link. Friends open it, everyone types a name, host **Creates a game** and shares the 4-letter code (uncheck Dev for a real multiplayer match).
+
+Notes: the free plan sleeps after ~15 min idle and cold-starts in ~30–60s on the next visit. Prefer no GitHub? **Railway** works the same way and its CLI can deploy straight from this folder: `npm i -g @railway/cli && railway login && railway init && railway up`.
+
 ## Project layout
 
 ```
