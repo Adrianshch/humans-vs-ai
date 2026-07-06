@@ -2,9 +2,11 @@
 # On Render: New +  →  Blueprint  →  connect this repo. It reads this file.
 services:
   - type: web
-    name: hidden-role-game
+    name: humans-vs-ai
     runtime: node
     plan: free
+    branch: main         # auto-deploy watches this branch
+    autoDeploy: true      # redeploy automatically on every push to `branch`
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health

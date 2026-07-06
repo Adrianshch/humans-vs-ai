@@ -94,10 +94,12 @@ This game needs a persistent WebSocket server, so it runs on a real Node host �
    git push -u origin main
    ```
    (Create the empty repo on github.com first.)
-2. **Deploy on Render:** go to [dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint** → connect your GitHub repo. Render reads `render.yaml` and deploys automatically.
+2. **Deploy on Render (one time):** go to [dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint** → connect this GitHub repo. Render reads `render.yaml` and deploys automatically.
 3. Share the resulting `https://your-app.onrender.com` link. Friends open it, everyone types a name, host **Creates a game** and shares the 4-letter code (uncheck Dev for a real multiplayer match).
 
-Notes: the free plan sleeps after ~15 min idle and cold-starts in ~30–60s on the next visit. Prefer no GitHub? **Railway** works the same way and its CLI can deploy straight from this folder: `npm i -g @railway/cli && railway login && railway init && railway up`.
+**Auto-deploy:** `render.yaml` sets `autoDeploy: true` on the `main` branch, so after that one-time connect, **every `git push` automatically rebuilds and redeploys** the live site — no further clicks. Watch progress in the Render dashboard's *Events* tab.
+
+Notes: the free plan sleeps after ~15 min idle and cold-starts in ~30–60s on the next visit. Prefer no GitHub? **Railway** works the same way (also auto-deploys on push) and its CLI can deploy straight from this folder: `npm i -g @railway/cli && railway login && railway init && railway up`.
 
 ## Project layout
 
