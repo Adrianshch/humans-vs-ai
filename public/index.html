@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find the AI — Hidden Role Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕵️</text></svg>" />
+</head>
+<body>
+  <div id="startup-warn" class="startup-warn hidden">
+    <div class="sw-card">
+      <h2>⚠️ Open the game through the server</h2>
+      <p id="sw-msg"></p>
+      <ol>
+        <li>In a terminal, from the <code>AI-game</code> folder, run:<br><code>npm install</code> &nbsp;then&nbsp; <code>npm start</code></li>
+        <li>Open <a href="http://localhost:3000">http://localhost:3000</a> in your browser.</li>
+      </ol>
+      <p class="sw-note">Don't double-click <code>index.html</code> — the game needs the running server for styling, buttons, and the AI players.</p>
+    </div>
+  </div>
+
+  <div id="app">
+
+    <!-- HOME -->
+    <section id="home" class="screen active">
+      <header class="hero">
+        <h1>🕵️ <span class="grad">Find the AI</span></h1>
+        <p class="tag">A hidden-role party game. Some players are humans. Some are AI running <b>locally on this machine</b>. Can you tell who's who?</p>
+      </header>
+
+      <div class="card">
+        <label class="lbl">Your name</label>
+        <input id="name" maxlength="20" placeholder="e.g. Adrian" />
+
+        <div class="row gap">
+          <button id="btn-quickplay" class="primary big">🎲 Quick Play <small>with strangers</small></button>
+        </div>
+
+        <div class="divider"><span>or play with friends</span></div>
+
+        <div class="row gap">
+          <button id="btn-create" class="secondary">➕ Create Game</button>
+          <div class="join-inline">
+            <input id="join-code" maxlength="4" placeholder="CODE" class="code-input" />
+            <button id="btn-join" class="secondary">Join</button>
+          </div>
+        </div>
+
+        <details class="opts">
+          <summary>Game options</summary>
+          <div class="opt-grid">
+            <div>
+              <label class="lbl">Mode</label>
+              <select id="mode">
+                <option value="classic">Classic — Find the AI (chat on)</option>
+                <option value="party">Party — Find the Humans (aliases, no chat)</option>
+              </select>
+            </div>
+            <div>
+              <label class="lbl">AI players</label>
+              <input id="bots" type="number" min="1" max="9" value="3" />
+            </div>
+            <div class="dev-row">
+              <label class="check"><input type="checkbox" id="dev" /> Dev mode <small>(solo — play alone vs bots)</small></label>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <button class="link ethics-open">🌱 Ethics &amp; energy transparency</button>
+    </section>
+
+    <!-- LOBBY -->
+    <section id="lobby" class="screen">
+      <div class="card wide">
+        <div class="lobby-head">
+          <div>
+            <div class="lbl">Room code</div>
+            <div id="lobby-code" class="bigcode"></div>
+            <button id="copy-code" class="link">📋 copy invite</button>
+          </div>
+          <div id="lobby-obj" class="obj"></div>
+        </div>
+
+        <div id="lobby-players" class="players-grid"></div>
+
+        <div id="host-controls" class="host-controls hidden">
+          <div class="row gap">
+            <label class="lbl">Mode</label>
+            <select id="lobby-mode">
+              <option value="classic">Classic — Find the AI</option>
+              <option value="party">Party — Find the Humans</option>
+            </select>
+            <label class="lbl">AI players</label>
+            <input id="lobby-bots" type="number" min="1" max="9" value="3" />
+            <label class="check"><input type="checkbox" id="lobby-dev" /> Dev</label>
+          </div>
+          <button id="btn-start" class="primary big">▶ Start Game</button>
+        </div>
+        <p id="wait-host" class="muted hidden">Waiting for the host to start…</p>
+      </div>
+      <button class="link ethics-open">🌱 Ethics &amp; energy transparency</button>
+    </section>
+
+    <!-- GAME -->
+    <section id="game" class="screen">
+      <div class="topbar">
+        <div class="pill" id="round-pill">Round 1</div>
+        <div class="pill" id="phase-pill">Answer</div>
+        <div class="timer-wrap"><div class="timer-bar"><div id="timer-fill"></div></div><span id="timer-txt">60</span></div>
+        <div class="pill grow" id="you-pill"></div>
+        <button class="link small ethics-open">🌱</button>
+      </div>
+
+      <div class="game-body">
+        <main class="stage">
+          <div id="prompt-box" class="prompt-box"></div>
+
+          <!-- ANSWER -->
+          <div id="answer-panel" class="panel">
+            <textarea id="answer-input" placeholder="Type a convincing, human answer…"></textarea>
+            <div class="row between">
+              <span id="char-count" class="muted"></span>
+              <div class="row gap">
+                <button id="btn-speed" class="ghost">⏩ Speed up</button>
+                <button id="btn-callvote" class="ghost">📣 Call vote</button>
+                <button id="btn-answer" class="primary">Submit</button>
+              </div>
+            </div>
+            <p id="answered-note" class="muted hidden">Answer locked in. Waiting for everyone…</p>
+          </div>
+
+          <!-- VOTE / RESULT -->
+          <div id="answers-panel" class="panel hidden"></div>
+        </main>
+
+        <aside class="side">
+          <div class="side-title" id="players-title">Players</div>
+          <div id="game-players" class="side-players"></div>
+          <div id="chat-box" class="chat">
+            <div id="chat-log" class="chat-log"></div>
+            <div class="chat-input">
+              <input id="chat-input" maxlength="240" placeholder="Debate: who's the AI?" />
+              <button id="btn-chat">Send</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ENDED -->
+    <section id="ended" class="screen">
+      <div class="card center">
+        <div id="end-emoji" class="end-emoji"></div>
+        <h1 id="end-title"></h1>
+        <p id="end-body" class="muted"></p>
+        <div id="end-reveal" class="reveal-grid"></div>
+        <div class="row gap center">
+          <button id="btn-again" class="primary hidden">🔁 Play again</button>
+          <button id="btn-home" class="secondary">🏠 Home</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ETHICS MODAL -->
+  <div id="ethics" class="modal">
+    <div class="modal-card">
+      <button class="modal-close ethics-close">✕</button>
+      <h2>🌱 Ethics &amp; Energy Transparency</h2>
+      <p class="muted">This game's whole premise is turning AI cost into something you can <i>feel</i>. So we don't hide it.</p>
+
+      <div class="eth-grid" id="eth-live"></div>
+
+      <h3>Where the AI runs</h3>
+      <p id="eth-engine" class="engine-line"></p>
+      <ul class="eth-list">
+        <li><b>No data centers, no cloud LLM calls.</b> The AI players run on a small model via <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a> on the machine hosting this game.</li>
+        <li><b>Tiny model on purpose.</b> Default is a ~1B-parameter model — orders of magnitude cheaper than a frontier chatbot. It sips power like a video game, not a render farm.</li>
+        <li><b>No per-query water/cooling cost</b> the way hyperscale data centers incur. The only energy is the electricity your own laptop already draws.</li>
+        <li><b>Learning is free.</b> Bots improve GAN-style from your votes — no expensive retraining runs; the "training" <i>is</i> you playing.</li>
+      </ul>
+
+      <h3>How it learns (the GAN loop)</h3>
+      <p class="muted">You, the human voters, are the <b>discriminator</b>. Every round:</p>
+      <ul class="eth-list">
+        <li>Real human answers are saved as the distribution the bots imitate.</li>
+        <li>AI answers that <b>survive</b> a vote are reinforced. Answers <b>caught</b> as AI are penalized.</li>
+        <li>This corpus conditions future answers, so bots get harder to detect over time — and it's exported as a preference dataset for real offline fine-tuning.</li>
+      </ul>
+
+      <h3>Footprint goal</h3>
+      <p class="muted">Target: no heavier per-player than Jackbox, Kahoot, Among Us, or a YouTube tab. A short local generation is a fraction of a second of GPU/CPU — comparable to a few seconds of video playback.</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

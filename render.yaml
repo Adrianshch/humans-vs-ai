@@ -1,0 +1,13 @@
+# Render Blueprint — one-click deploy of the Hidden Role Game.
+# On Render: New +  →  Blueprint  →  connect this repo. It reads this file.
+services:
+  - type: web
+    name: hidden-role-game
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

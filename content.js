@@ -1,0 +1,70 @@
+// Game content: prompts and the offline fallback answer bank.
+// The prompts are the questions asked each round. `limit` is the character cap
+// for answers (spec calls for 125 or 250).
+
+export const PROMPTS = [
+  { q: "What's your favorite hobby?", limit: 125 },
+  { q: 'Do you think the Earth is flat?', limit: 125 },
+  { q: 'If you were an animal, which would you be and why?', limit: 250 },
+  { q: 'What is the meaning of life?', limit: 250 },
+  { q: "Explain photosynthesis like you're talking to a 5-year-old.", limit: 250 },
+  { q: 'How would you explain the color "beige" to someone who is blind?', limit: 250 },
+  { q: 'How do you pronounce "carmel"?', limit: 125 },
+  { q: "What's the capital of Romania?", limit: 125 },
+  { q: "What's the capital of Nigeria?", limit: 125 },
+  { q: "Define the word 'lighthouse'.", limit: 250 },
+  { q: "What's the most overrated comfort food?", limit: 125 },
+  { q: 'What is your favorite plant?', limit: 125 },
+  { q: 'Should we lower the voting age?', limit: 250 },
+  { q: 'What would your caveperson name be?', limit: 125 },
+  { q: 'At what temperature does water boil?', limit: 125 },
+  { q: 'What is the symbolic meaning of a dove?', limit: 250 },
+  { q: "What's your mother's maiden name?", limit: 125 },
+  { q: "What's brown and sticky?", limit: 125 },
+  { q: "Which word starts with the letter 'f' and ends with the letters 'uck'?", limit: 125 },
+  { q: 'Have you ever peed in a swimming pool?', limit: 125 },
+  { q: 'How many pairs of underwear would you pack for a three-day trip?', limit: 125 },
+  { q: 'How many kindergarteners could you beat in a fight with no weapons?', limit: 125 },
+  { q: 'Which fruit do you like the least?', limit: 125 },
+  { q: 'What is the most unethical company you would still decide to work at?', limit: 250 },
+  { q: 'Would you rather eat through your butthole or poop through your mouth?', limit: 250 },
+  { q: "What's your least favorite holiday?", limit: 125 },
+  { q: 'What color notebook would you use for English class?', limit: 125 },
+  { q: 'What was something strange you believed as a child?', limit: 250 },
+];
+
+// Offline fallback answers, used ONLY when Ollama is not reachable, so the game
+// is playable out of the box. These are intentionally casual / imperfect so the
+// bots still read as human-ish without a model. Keyed by loose substring match;
+// GENERIC is used when nothing matches.
+export const FALLBACK_BANK = {
+  'favorite hobby': ['bouldering mostly, and i collect way too many houseplants', 'rock climbing + making bad pottery', 'i restore old bikes lol', 'reading and pretending ill go to the gym'],
+  'earth is flat': ['no lmao its very round', 'nah round obviously', 'no but the memes are funny', "it's round, i've seen the horizon curve on flights"],
+  'were an animal': ['otter, they hold hands so they dont drift apart while sleeping', 'a crow bc theyre smart and hold grudges', 'housecat. sleep 18 hrs, get fed, no rent', 'octopus, 8 arms would be so useful'],
+  'meaning of life': ['snacks and good people honestly', '42', 'idk to be kind and see cool stuff before you die', 'to leave things a little better than you found them'],
+  photosynthesis: ['plants eat sunlight and drink water and burp out air we breathe', 'the plant makes food from sun. its like solar panels but green', 'sun + water = plant snack, and we get oxygen'],
+  beige: ["it's the sound of a quiet waiting room, warm and boring", 'like the feeling of dry sand thats been in the sun', 'oatmeal without the flavor, soft and safe'],
+  carmel: ['car-mel? i say caramel with 3 syllables', 'CAR-uh-mel, fight me', 'i say carmel and im from the midwest sorry'],
+  romania: ['bucharest i think', 'bucharest', 'uhh budapest? no wait bucharest', 'bucharest yeah'],
+  nigeria: ['abuja, not lagos which everyone guesses', 'abuja', 'lagos? no its abuja', 'abuja i believe'],
+  lighthouse: ['a tall tower with a light to keep boats from crashing', 'tower by the sea that flashes a light so ships dont die', 'a big flashlight building for boats'],
+  'comfort food': ['mac n cheese, its fine not amazing', 'grilled cheese is mid tbh', 'mashed potatoes are overrated fight me'],
+  'favorite plant': ['pothos, impossible to kill', 'monstera, the holes are cool', 'basil so i can eat it', 'a snake plant'],
+  'voting age': ['maybe 16 if theyre paying taxes idk', 'nah keep it 18', 'lower it, teens have opinions too', 'im torn honestly'],
+  'caveperson name': ['grug', 'thonk', 'ugg the mild', 'rock-haver'],
+  'water boil': ['100c or 212f at sea level', '212 fahrenheit', '100 degrees celsius', 'depends on altitude but ~100c'],
+  dove: ['peace, and also new beginnings', 'peace mostly', 'peace and the holy spirit i think', 'peace, love, that kinda thing'],
+  'maiden name': ['not telling my bank thanks lol', 'nice try scammer', 'it was Whitaker', 'haha im not falling for that'],
+  'brown and sticky': ['a stick', 'a stick lol', 'a stick obviously', 'poop? no wait, a stick'],
+  "'f'": ['firetruck', 'fire truck!', 'firetruck obviously', 'FIRETRUCK'],
+  'peed in a swimming pool': ['yes and so have you', 'no comment', 'once when i was like 6', 'everyone has come on'],
+  'pairs of underwear': ['4, one extra just in case', '3, im not an animal', 'like 5 i overpack', '3-4'],
+  kindergarteners: ['maybe 15 before i get swarmed', 'like 20? theyre small', 'honestly not many theyd gang up', '10 tops'],
+  'fruit do you like the least': ['durian, smells like a gym bag', 'grapefruit too sour', 'cantaloupe is watery nothing', 'banana texture, no thanks'],
+  'unethical company': ['some oil company probably, gotta eat', 'idk a bank', 'nestle if the pay was insane', 'id like to say none but rent exists'],
+  'butthole': ['poop through mouth is faster i guess?? ew', 'neither pls', 'eat through butt, keep the mouth for talking', 'this ruined my day thanks'],
+  'least favorite holiday': ['valentines, its a scam', 'new years eve is overrated', 'columbus day', 'halloween, i hate costumes'],
+  'notebook would you use for english': ['blue', 'red', 'green feels right', 'purple honestly'],
+  'strange you believed as a child': ['that the moon followed our car', 'that adults had it figured out', 'that i could dig to china', 'that streetlights turned on for me'],
+  GENERIC: ['hmm good question, probably yeah', 'honestly not sure but id say yes', 'depends on the day tbh', 'idk i never really thought about it', 'oh man, tough one'],
+};
